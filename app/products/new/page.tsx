@@ -9,9 +9,11 @@ const NewProductPage = () => {
     const[description, setDescription] = useState('');
     const[price, setPrice] = useState('');
     async function createProduct(ev:React.FormEvent){
+        console.log('Create product')
         ev.preventDefault();
         const data = {title, description,price}
         axios.post('/products/product-detail',data)
+        console.log('Create product', data)
     }
   
     return (

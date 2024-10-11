@@ -1,3 +1,9 @@
-import {Schema}
+import { model, Schema } from "mongoose"
 
-const ModelSchema = new Schema
+const ProductSchema = new Schema({
+    title: {type: String, require: true},
+    description: String,
+    price: {type: Number, required: true}
+});
+
+const Product = model('product', ProductSchema)
