@@ -1,19 +1,26 @@
-"use client"
+'use client'
 
 import Layout from "@/components/layout"
 import axios from "axios";
 import { useState } from "react";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const NewProductPage = () => {
     const[title, setTitle] = useState('');
     const[description, setDescription] = useState('');
     const[price, setPrice] = useState('');
-    async function createProduct(ev:React.FormEvent){
-        console.log('Create product')
+    const router = useRouter()
+    async function createProduct(ev: React.FormEvent) {
         ev.preventDefault();
-        const data = {title, description,price}
-        axios.post('/products/product-detail',data)
-        console.log('Create product', data)
+        const data = { title, description, price };
+        try {
+            const response = await axios.post('/api/product', data);
+            console.log('Product created successfully', response.data);
+            router.push('/products')
+        } catch (error) {
+            console.error('Error creating product:', error);
+        }
     }
   
     return (
@@ -38,3 +45,5 @@ const NewProductPage = () => {
 }
 
 export default NewProductPage;
+
+//ruta: app/products/new/page.tsx

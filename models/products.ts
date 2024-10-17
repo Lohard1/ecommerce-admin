@@ -1,4 +1,6 @@
-import { model, Schema } from "mongoose"
+//ruta models/products.ts
+
+import { model, Schema, models } from "mongoose"
 
 const ProductSchema = new Schema({
     title: {type: String, require: true},
@@ -6,4 +8,4 @@ const ProductSchema = new Schema({
     price: {type: Number, required: true}
 });
 
-const Product = model('product', ProductSchema)
+export const Product = models.Product || model('Product', ProductSchema);
