@@ -4,4 +4,5 @@ export interface ProductType {
     title?: string;
     description?: string;
     price?: number; 
+    images?: any;
 }

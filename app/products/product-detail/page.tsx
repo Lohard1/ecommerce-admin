@@ -4,11 +4,9 @@ import { mongooseConnect } from '@/lib/mongoose';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
     const {method} = req;
-    console.log('antes de post')
     await mongooseConnect();
     //mongoose.Promise = clientPromise
         if (method === 'POST') {
-            console.log('post recibido')
             const {title,description,price} =req.body
             const productDoc = await Product.create({
                 title,description,price,
