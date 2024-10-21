@@ -9,8 +9,10 @@ export async function POST(req: NextRequest) {
     
     try {
         await mongooseConnect();
-        const { title, description, price } = await req.json();
-        const productDoc = await Product.create({ title, description, price });
+        const { title, description, price, images } = await req.json();
+        const productDoc = await Product.create({ title, description, price, images });
+        console.log(images);
+        console.log(productDoc);
         
         return NextResponse.json(productDoc, { status: 200 });
     } catch (error) {
@@ -46,8 +48,8 @@ export async function PUT(req: NextRequest) {
     try {
         await mongooseConnect();
         console.log ('Connect success')
-        const { title, description, price, _id } = await req.json();
-        await Product.updateOne({_id}, {title, description, price})
+        const { title, description, price, _id, images } = await req.json();
+        await Product.updateOne({_id}, {title, description, price, images})
         console.log ('after update')
         return NextResponse.json(true);
     } catch (error) {

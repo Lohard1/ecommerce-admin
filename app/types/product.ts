@@ -4,5 +4,11 @@ export interface ProductType {
     title?: string;
     description?: string;
     price?: number; 
-    images?: any;
+    images?: Array<string>;
+}
+
+export interface CategoryType {
+    _id?: string;
+    __v?: number;
+    name?: string;
 }

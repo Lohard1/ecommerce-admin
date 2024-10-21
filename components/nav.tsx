@@ -3,9 +3,11 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation";
 import IconGear from "./svg/IconGear";
-import IconStore from "./svg/IconUpload copy";
+import IconStore from "./svg/IconStore";
 import IconHome from "./svg/IconHome";
 import IconProducts from "./svg/IconProducts";
+import IconOrders from "./svg/IconOrders";
+import IconCategories from "./svg/IconCategories";
 
 export const Nav = ({ }) => {
     const inactiveLink = 'flex gap-1 p-1';
@@ -29,8 +31,12 @@ export const Nav = ({ }) => {
                     <IconProducts></IconProducts>
                     <span>Products</span>
                 </Link>
+                <Link href={'/categories'} className={(pathname).includes('/categories')? activeLink:inactiveLink}>
+                    <IconCategories></IconCategories>
+                    <span>Categories</span>
+                </Link>
                 <Link href={'/orders'} className={(pathname).includes('/orders')? activeLink:inactiveLink}>
-                    <IconProducts></IconProducts>
+                    <IconOrders></IconOrders>
                     <span>Orders</span>
                 </Link>
                 <Link href={'/settings'} className={(pathname).includes('/settings')? activeLink:inactiveLink} >
