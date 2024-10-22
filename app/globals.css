@@ -51,7 +51,7 @@ label{
 }
 
 .btn-primary {
-  @apply text-white bg-blue-900 p-1 px-2 rounded-lg 
+  @apply text-white bg-blue-900 p-0.5 px-2 rounded-lg mx-1
 }
 
 table.basic {
@@ -65,4 +65,8 @@ table.basic tr td{
 }
 table.basic a{
   @apply bg-blue-900 text-white text-sm py-1 rounded-md px-1 inline-flex mx-1
+}
+
+select {
+  @apply border-2 rounded-md border-blue-300
 }

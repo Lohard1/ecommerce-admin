@@ -11,8 +11,6 @@ export async function POST(req: NextRequest) {
         await mongooseConnect();
         const { title, description, price, images } = await req.json();
         const productDoc = await Product.create({ title, description, price, images });
-        console.log(images);
-        console.log(productDoc);
         
         return NextResponse.json(productDoc, { status: 200 });
     } catch (error) {

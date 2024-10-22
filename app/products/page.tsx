@@ -21,18 +21,21 @@ const ProductsPage = () => {
 
     return (
         <Layout>
-            <div className="flex justify-end">
-            <Link className="bg-blue-800 p-1 m-2 rounded-md text-white text-md inline-flex justify-end" href="/products/new">
+            <div className="flex justify-start">
+            <Link className="bg-blue-800 p-1 m-2 rounded-md text-white text-md inline-flex" href="/products/new">
                 Add new product
             </Link>
             </div>
+            <h1>Productos</h1>
             <table className="basic mt-2">
                 <thead>
                     <tr>
                         <td>
                             Product Name
                         </td>
-                        <td></td>
+                        <td>
+                            Actions
+                        </td>
                     </tr>
                 </thead>
                 <tbody>
