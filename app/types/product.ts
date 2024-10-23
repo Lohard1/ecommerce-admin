@@ -5,6 +5,7 @@ export interface ProductType {
     description?: string;
     price?: number; 
     images?: Array<string>;
+    category?: string;
 }
 
 export interface CategoryType {

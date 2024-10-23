@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ProductType } from "@/app/types/product";
 import IconUpload from "./svg/IconUpload";
 import Spinner from "./loader";
+import { CategoryType } from "@/app/types/product";
 
 const ProductForm = ({ product }: { product?: ProductType }) => {
     const [title, setTitle] = useState(product?.title || '');
@@ -13,15 +14,24 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
     const [price, setPrice] = useState(product?.price || '');
     const [images, setImages] = useState(product?.images || [])
     const [isUploading, setIsUploading] = useState(false);
+    const [categories, setCategories] = useState<CategoryType[]>([]);
+    const [category, setCategory] = useState( product?.category||'');
     const router = useRouter();
-    console.log(product?._id)
+
+    useEffect(() =>{
+        axios.get('/api/categories').then(result =>{
+            setCategories(result.data); 
+            console.log('category: ',category)
+        })
+    }, [category]);
+
 
     async function saveProduct(ev: React.FormEvent) {
         ev.preventDefault();
-        const data = { title, description, price, images };
+        const data = { title, description, price, images, category };
         if (product?._id) {
             try {
-                await axios.put('/api/product', { ...data, _id: product._id })
+                const response = await axios.put('/api/product', { ...data, _id: product._id })
                 console.log('Product edit success');
 
             } catch (error) {
@@ -59,15 +69,22 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
         };
     };
 
-    useEffect(() => {
-        console.log(images);
-    }, [images]);
-
     return (
         <form onSubmit={saveProduct}>
             <label>Product Name</label>
             <input type="text" placeholder="Product Name" value={title} onChange={ev => setTitle(ev.target.value)}>
             </input>
+            <label>Category</label>
+            <div>
+            <select value={category} onChange={ev => setCategory(ev.target.value)} >
+                <option value=''>Uncategorized</option>
+                {categories.length>0 && categories.map( c => (
+                    <option key={c._id} value={c._id}>{c.name}</option>
+                ))}
+            </select>
+            </div>
+
+
             <label> Photos </label>
             <div className="flex flex-row">
                 {!!images?.length && images.map(link => (
