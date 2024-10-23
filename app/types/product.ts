@@ -12,4 +12,5 @@ export interface CategoryType {
     _id?: string;
     __v?: number;
     name?: string;
+    parent?: CategoryType;
 }
