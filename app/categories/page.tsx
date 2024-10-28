@@ -9,7 +9,8 @@ const CategoriesPage = () => {
     const [categories, setCategories] = useState<CategoryType[]>([]);
     const [categoryName, setCategoryName] = useState<string>('');
     const [parentCategoryName, setParentCategoryName] = useState<string>('');
-    const [editedCategory, setEditedCategory] = useState<CategoryType>();
+    const [editedCategory, setEditedCategory] = useState<CategoryType | null>(null);
+    const [properties, setProperties] = useState<CategoryType['properties'] | null>([]) ;
 
     useEffect(() => {
         fetchCategories();
@@ -24,18 +25,23 @@ const CategoriesPage = () => {
     async function saveCategory(ev: React.FormEvent) {
 
         ev.preventDefault();
-        const data = { categoryName, parentCategoryName }
+        const data = { categoryName, parentCategoryName, properties }
+        console.log('data: ',data)
 
         if (editedCategory){
             const response = await axios.put('/api/categories', {...data, _id: editedCategory._id});
             console.log('Category edited successfully', response.data);
             setCategoryName('');
+            setProperties(null);
+            setEditedCategory(null);
             fetchCategories();
 
         } else {
             const response = await axios.post('/api/categories', data);
             console.log('Category created successfully', response.data);
             setCategoryName('');
+            setProperties(null);
+            setEditedCategory(null);
             fetchCategories();
         }
 
@@ -60,6 +66,7 @@ const CategoriesPage = () => {
     }
 
     function editCategory(category: any){
+        console.log(category);
         setEditedCategory(category);
         setCategoryName(category.name);
         if (category.parent?._id){
@@ -67,6 +74,41 @@ const CategoriesPage = () => {
         } else {
             setParentCategoryName('');
         }
+        if (category.properties){
+            setProperties(category.properties);
+        } 
+    }
+
+    function addProperty() {
+        setProperties(prev => [...(prev ?? []), {name: '', value:''}])
+    }
+
+    function handlePropertyNameChange(index:any, property:any, newName:any){
+        setProperties(prev => {
+            const properties = [...(prev ?? [])];
+            properties[index].name = newName;
+            return properties;
+        });
+        console.log({index,property,newName})
+    }
+
+    function handlePropertyValueChange(index:any, property:any, newValue:any){
+        setProperties(prev => {
+            const properties = [...(prev ?? [])];
+            properties[index].value = newValue;
+            return properties;
+        });
+        console.log({index,property,newValue})
+    }
+
+    function removeProperty(index: any){
+        setProperties(prev => {
+            const newProperties = [...(prev ?? [])].filter((p, pIndex)=>{
+                return pIndex !== index ;
+            });
+            return newProperties;
+        })
+
     }
 
 
@@ -86,10 +128,29 @@ const CategoriesPage = () => {
                         ))}
                     </select>
                 </div>
+                <div>
+                    <label>Properties</label>
+                    <button type="button" className="btn-primary mb-4 text-sm" onClick={addProperty}> Add new property</button>
+                    {(properties ?? []).length > 0 && properties?.map((property, index) => (
+                        <div className="flex gap-1">
+                            <input type="text" value={property.name} onChange={ev => handlePropertyNameChange(index, property, ev.target.value)} placeholder="property name (example:color)"></input>
+                            <input type="text" value={property.value} onChange={ev => handlePropertyValueChange(index, property, ev.target.value)} placeholder="values, comma separated"></input>
+                            <button type="button" className="btn-primary text-sm mb-1" onClick={ () => removeProperty(index)}>Remove</button>
+                        </div>
+                    ))}
+                </div>
+                {editedCategory && (
+                    <button type="button" className="btn-primary" onClick={() => {
+                        setEditedCategory(null);
+                        setProperties(null);
+                        setParentCategoryName('');
+                    }}> Cancel </button>
+                ) }
                 <button className="btn-primary" type="submit"> Save </button>
             </form>
 
-            <table className="basic mt-2">
+            {!editedCategory && (
+                <table className="basic mt-2">
                 <thead>
                     <tr>
                         <td>Categories</td>
@@ -110,17 +171,7 @@ const CategoriesPage = () => {
                     ))}
                 </tbody>
             </table>
-
-
-
-
-
-
-
-
-
-
-
+            )}
         </Layout>
     );
 }

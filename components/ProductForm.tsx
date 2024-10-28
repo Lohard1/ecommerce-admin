@@ -12,16 +12,16 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
     const [title, setTitle] = useState(product?.title || '');
     const [description, setDescription] = useState(product?.description || '');
     const [price, setPrice] = useState(product?.price || '');
-    const [images, setImages] = useState(product?.images || [])
+    const [images, setImages] = useState(product?.images || []);
     const [isUploading, setIsUploading] = useState(false);
     const [categories, setCategories] = useState<CategoryType[]>([]);
-    const [category, setCategory] = useState( product?.category||'');
+    const [category, setCategory] = useState(product?.category || '');
     const router = useRouter();
 
-    useEffect(() =>{
-        axios.get('/api/categories').then(result =>{
-            setCategories(result.data); 
-            console.log('category: ',category)
+    useEffect(() => {
+        axios.get('/api/categories').then(result => {
+            setCategories(result.data);
+            console.log('category: ', category)
         })
     }, [category]);
 
@@ -76,12 +76,12 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
             </input>
             <label>Category</label>
             <div>
-            <select value={category} onChange={ev => setCategory(ev.target.value)} >
-                <option value=''>Uncategorized</option>
-                {categories.length>0 && categories.map( c => (
-                    <option key={c._id} value={c._id}>{c.name}</option>
-                ))}
-            </select>
+                <select value={category} onChange={ev => setCategory(ev.target.value)} >
+                    <option value=''>Uncategorized</option>
+                    {categories.length > 0 && categories.map(c => (
+                        <option key={c._id} value={c._id}>{c.name}</option>
+                    ))}
+                </select>
             </div>
 
 

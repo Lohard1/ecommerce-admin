@@ -9,11 +9,15 @@ export async function POST(req: NextRequest) {
 
     try {
         await mongooseConnect();
-        const { categoryName, parentCategoryName } = await req.json();
+        const { categoryName, parentCategoryName, properties } = await req.json();
         const categoryData: any = { name: categoryName };
 
         if (parentCategoryName) {
             categoryData.parent = parentCategoryName;
+        }
+
+        if (properties) {
+            categoryData.properties = properties;
         }
 
         const categoryDoc = await Category.create(categoryData);
@@ -42,9 +46,21 @@ export async function PUT(req: NextRequest) {
     try {
         await mongooseConnect();
         console.log ('Connect success')
-        const { categoryName, parentCategoryName, _id } = await req.json();
-        await Category.updateOne({_id}, { name: categoryName, parent: parentCategoryName})
-        console.log ('after update')
+        let { categoryName, parentCategoryName, _id, properties } = await req.json();
+
+        if (parentCategoryName) {
+            await Category.updateOne(
+                { _id },
+                { name: categoryName, parent: parentCategoryName, properties }
+            );
+        } else {
+            // Si `parentCategoryName` no tiene un valor, eliminamos el campo `parent`
+            await Category.updateOne(
+                { _id },
+                { name: categoryName, properties, $unset: { parent: '' } }
+            );
+        }
+
         return NextResponse.json(true);
     } catch (error) {
         return NextResponse.json({ message: 'Error al editar los productos', error }, { status: 500 });
