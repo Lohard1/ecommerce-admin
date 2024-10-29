@@ -10,17 +10,14 @@ export async function POST(req: NextRequest) {
     try {
         await mongooseConnect();
         const { categoryName, parentCategoryName, properties } = await req.json();
-        const categoryData: any = { name: categoryName };
+        const categoryData: any = { name: categoryName, properties};
 
         if (parentCategoryName) {
             categoryData.parent = parentCategoryName;
         }
 
-        if (properties) {
-            categoryData.properties = properties;
-        }
-
         const categoryDoc = await Category.create(categoryData);
+        console.log(categoryData)
 
         return NextResponse.json(categoryDoc, { status: 200 });
     } catch (error) {
@@ -47,6 +44,7 @@ export async function PUT(req: NextRequest) {
         await mongooseConnect();
         console.log ('Connect success')
         let { categoryName, parentCategoryName, _id, properties } = await req.json();
+        console.log(properties)
 
         if (parentCategoryName) {
             await Category.updateOne(

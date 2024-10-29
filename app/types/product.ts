@@ -13,5 +13,5 @@ export interface CategoryType {
     __v?: number;
     name?: string;
     parent?: CategoryType;
-    properties?: Array<{name: string, value: string}>;
+    properties?: Array<{name: string, values: Array<string>} > ;
 }

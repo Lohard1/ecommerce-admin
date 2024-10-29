@@ -11,6 +11,7 @@ const CategoriesPage = () => {
     const [parentCategoryName, setParentCategoryName] = useState<string>('');
     const [editedCategory, setEditedCategory] = useState<CategoryType | null>(null);
     const [properties, setProperties] = useState<CategoryType['properties'] | null>([]) ;
+    
 
     useEffect(() => {
         fetchCategories();
@@ -25,7 +26,13 @@ const CategoriesPage = () => {
     async function saveCategory(ev: React.FormEvent) {
 
         ev.preventDefault();
-        const data = { categoryName, parentCategoryName, properties }
+        const data = { categoryName, parentCategoryName, 
+            properties: properties?.map(p => ({
+                name: p.name,
+                values: p.values,
+            }))
+        }
+        
         console.log('data: ',data)
 
         if (editedCategory){
@@ -80,7 +87,7 @@ const CategoriesPage = () => {
     }
 
     function addProperty() {
-        setProperties(prev => [...(prev ?? []), {name: '', value:''}])
+        setProperties(prev => [...(prev ?? []), {name: '', values: []}])
     }
 
     function handlePropertyNameChange(index:any, property:any, newName:any){
@@ -95,10 +102,10 @@ const CategoriesPage = () => {
     function handlePropertyValueChange(index:any, property:any, newValue:any){
         setProperties(prev => {
             const properties = [...(prev ?? [])];
-            properties[index].value = newValue;
+            properties[index].values = newValue.split(',');
             return properties;
         });
-        console.log({index,property,newValue})
+        console.log({index,property,newValue})    
     }
 
     function removeProperty(index: any){
@@ -132,9 +139,9 @@ const CategoriesPage = () => {
                     <label>Properties</label>
                     <button type="button" className="btn-primary mb-4 text-sm" onClick={addProperty}> Add new property</button>
                     {(properties ?? []).length > 0 && properties?.map((property, index) => (
-                        <div className="flex gap-1">
-                            <input type="text" value={property.name} onChange={ev => handlePropertyNameChange(index, property, ev.target.value)} placeholder="property name (example:color)"></input>
-                            <input type="text" value={property.value} onChange={ev => handlePropertyValueChange(index, property, ev.target.value)} placeholder="values, comma separated"></input>
+                        <div className="flex gap-1" key={index}>
+                            <input type="text" value={property?.name} onChange={ev => handlePropertyNameChange(index, property, ev.target.value)} placeholder="property name (example:color)"></input>
+                            <input type="text" value={property?.values} onChange={ev => handlePropertyValueChange(index, property, ev.target.value)} placeholder="values, comma separated"></input>
                             <button type="button" className="btn-primary text-sm mb-1" onClick={ () => removeProperty(index)}>Remove</button>
                         </div>
                     ))}
@@ -144,6 +151,7 @@ const CategoriesPage = () => {
                         setEditedCategory(null);
                         setProperties(null);
                         setParentCategoryName('');
+                        setCategoryName('');
                     }}> Cancel </button>
                 ) }
                 <button className="btn-primary" type="submit"> Save </button>
