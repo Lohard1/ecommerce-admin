@@ -6,6 +6,7 @@ export interface ProductType {
     price?: number; 
     images?: Array<string>;
     category?: string;
+    properties?: Array<{name: string, values: string } > ;
 }
 
 export interface CategoryType {
@@ -13,5 +14,5 @@ export interface CategoryType {
     __v?: number;
     name?: string;
     parent?: CategoryType;
-    properties?: Array<{name: string, values: Array<string>} > ;
+    properties?: Array<{name: string, values: Array<string> } > ;
 }

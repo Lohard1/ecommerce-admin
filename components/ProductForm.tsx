@@ -15,24 +15,50 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
     const [images, setImages] = useState(product?.images || []);
     const [isUploading, setIsUploading] = useState(false);
     const [categories, setCategories] = useState<CategoryType[]>([]);
-    const [category, setCategory] = useState(product?.category || '');
+    const [categoryId, setcategoryId] = useState(product?.category || '');
+    const [productProperties, setProductProperties] = useState<ProductType['properties']>([]);
+
     const router = useRouter();
+    const properties = [];
 
     useEffect(() => {
         axios.get('/api/categories').then(result => {
             setCategories(result.data);
-            console.log('category: ', category)
+            console.log('categoryId: ', categoryId)
         })
-    }, [category]);
+    }, [categoryId]);
 
+    useEffect(() => {
+        if (!product?.properties) {
+            const initialProperties = product?.properties?.map(prop => ({
+                name: prop.name,
+                values: prop.values[0] // Obtiene el primer valor por defecto
+            }));
+            setProductProperties(initialProperties);
+        }
+        else {
+            setProductProperties(product.properties);
+        }
+    }, [product]);
+
+    if (categoryId) {
+        const selCatInfo = (categories.find(item => item._id === categoryId))
+        if (selCatInfo) {
+            properties.push(
+                ...(selCatInfo.properties || []),
+                ...(selCatInfo.parent?.properties || [])
+            );
+        }
+
+    }
 
     async function saveProduct(ev: React.FormEvent) {
         ev.preventDefault();
-        const data = { title, description, price, images, category };
+        const data = { title, description, price, images, categoryId, productProperties };
         if (product?._id) {
             try {
                 const response = await axios.put('/api/product', { ...data, _id: product._id })
-                console.log('Product edit success');
+                console.log('Product edit success, data: ',data);
 
             } catch (error) {
                 console.error('Error editing product:', error);
@@ -69,6 +95,20 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
         };
     };
 
+    function setProductProp(propName: string, value: string) {
+        const updatedProperties = [...productProperties || []];
+
+        const existingPropIndex = updatedProperties.findIndex(prop => prop.name === propName);
+
+        if (existingPropIndex !== -1) {
+            updatedProperties[existingPropIndex].values = value;
+        } else {
+            updatedProperties.push({ name: propName, values: value });
+        }
+        setProductProperties(updatedProperties);
+        console.log(productProperties)
+    }
+
     return (
         <form onSubmit={saveProduct}>
             <label>Product Name</label>
@@ -76,15 +116,24 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
             </input>
             <label>Category</label>
             <div>
-                <select value={category} onChange={ev => setCategory(ev.target.value)} >
+                <select value={categoryId} onChange={ev => {setcategoryId(ev.target.value); setProductProperties([])}} >
                     <option value=''>Uncategorized</option>
                     {categories.length > 0 && categories.map(c => (
                         <option key={c._id} value={c._id}>{c.name}</option>
                     ))}
                 </select>
+
+                {properties.length > 0 && productProperties && properties.map((prop, index) => (
+                    <div key={index} className="flex w-full gap-1">
+                        <div>{prop.name}</div>
+                        <select value={productProperties.find(p => p.name === prop.name)?.values || ''} onChange={ev => setProductProp(prop.name, ev.target.value)} >
+                            {prop.values.map((item,index) => (
+                                <option key={index} value={item} >{item}</option>
+                            ))}
+                        </select>
+                    </div>
+                ))}
             </div>
-
-
             <label> Photos </label>
             <div className="flex flex-row">
                 {!!images?.length && images.map(link => (

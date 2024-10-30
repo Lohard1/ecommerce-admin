@@ -8,6 +8,7 @@ import IconHome from "./svg/IconHome";
 import IconProducts from "./svg/IconProducts";
 import IconOrders from "./svg/IconOrders";
 import IconCategories from "./svg/IconCategories";
+import { signOut } from "next-auth/react";
 
 export const Nav = ({ }) => {
     const inactiveLink = 'flex gap-1 p-1';
@@ -43,9 +44,11 @@ export const Nav = ({ }) => {
                     <IconGear></IconGear>
                     <span>Settings</span>
                 </Link>
-
+                    <button onClick={()=>signOut()} className={inactiveLink}>
+                    <IconGear></IconGear>
+                    <span>Logout</span>
+                    </button>
             </nav>
-
         </aside>
     )
 }

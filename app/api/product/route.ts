@@ -9,8 +9,9 @@ export async function POST(req: NextRequest) {
     
     try {
         await mongooseConnect();
-        const { title, description, price, images, category } = await req.json();
-        const productDoc = await Product.create({ title, description, price, images, category });
+        const { title, description, price, images, categoryId, productProperties } = await req.json();
+        const productDoc = await Product.create({ title, description, price, images, category: categoryId, properties: productProperties });
+        console.log(productProperties)
         
         return NextResponse.json(productDoc, { status: 200 });
     } catch (error) {
@@ -46,9 +47,9 @@ export async function PUT(req: NextRequest) {
     try {
         await mongooseConnect();
         console.log ('Connect success')
-        const { title, description, price, _id, images, category } = await req.json();
-        await Product.updateOne({_id}, {title, description, price, images, category})
-        console.log ('after update')
+        const { title, description, price, _id, images, categoryId, productProperties } = await req.json();
+        console.log(productProperties)
+        await Product.updateOne({_id}, {title, description, price, images, category: categoryId, properties: productProperties})
         return NextResponse.json(true);
     } catch (error) {
         return NextResponse.json({ message: 'Error al editar los productos', error }, { status: 500 });
