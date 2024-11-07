@@ -4,30 +4,28 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { mongooseConnect } from '@/lib/mongoose';
 import { Category } from '@/models/categories';
-import { auth } from '@/auth';
 
 export async function POST(req: NextRequest) {
 
     try {
         await mongooseConnect();
         const { categoryName, parentCategoryName, properties } = await req.json();
-        const categoryData: any = { name: categoryName, properties};
+        console.log({ categoryName, parentCategoryName, properties });
 
-        if (parentCategoryName) {
-            categoryData.parent = parentCategoryName;
+        if (parentCategoryName === ''){
+            const categoryDoc = await Category.create( {name: categoryName, properties});
+            return NextResponse.json(categoryDoc, { status: 200 });
+        } else {
+            const categoryDoc = await Category.create( {name: categoryName , parent: parentCategoryName, properties});
+            return NextResponse.json(categoryDoc, { status: 200 });
         }
 
-        const categoryDoc = await Category.create(categoryData);
-        console.log(categoryData)
-
-        return NextResponse.json(categoryDoc, { status: 200 });
     } catch (error) {
         return NextResponse.json({ message: 'Error al crear la categoria', error }, { status: 500 });
     }
 }
 
-export async function GET(req: NextRequest) {
-    const session = await auth()
+export async function GET() {
     try {
         await mongooseConnect();
 
@@ -44,7 +42,7 @@ export async function PUT(req: NextRequest) {
     try {
         await mongooseConnect();
         console.log ('Connect success')
-        let { categoryName, parentCategoryName, _id, properties } = await req.json();
+        const { categoryName, parentCategoryName, _id, properties } = await req.json();
         console.log(properties)
 
         if (parentCategoryName) {

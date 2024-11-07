@@ -32,7 +32,7 @@ const DeleteProductPage = () => {
 
     return (
         <Layout>
-            <h1>Do you really want to delete "{productInfo?.title}"?</h1>
+            <h1>Do you really want to delete &quot;{productInfo?.title}&quot;?</h1>
             <div className="flex flex-row justify-center mt-4">
             <button onClick={deleteProduct} className="rounded bg-red-600 p-1 px-4 mx-4 ring-1 ring-black text-white">YES</button>
             <button className="rounded bg-gray-600 p-1 px-4 mx-4 ring-1 ring-black text-white">NO</button>

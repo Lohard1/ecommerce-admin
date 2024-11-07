@@ -4,7 +4,6 @@ import Layout from "@/components/layout"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { CategoryType } from "../types/product"
-import { EditIcon } from "lucide-react"
 import IconEdit from "@/components/svg/IconEdit"
 import IconDelete from "@/components/svg/IconDelete"
 

@@ -21,7 +21,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <h1 className={cn
                         ("text-6xl font-semibold text-white drop-shadow-md",
                             font.className)}>
-                        🏪 Ecommerce Admin Panel
+                        🏪 Ecommerce Admin Panel {session}
                     </h1>
                     <p className="text-white text-lg">
                         Authentication service

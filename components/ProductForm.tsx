@@ -57,7 +57,7 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
         if (product?._id) {
             try {
                 const response = await axios.put('/api/product', { ...data, _id: product._id })
-                console.log('Product edit success, data: ',data);
+                console.log('Product edit success, data: ',response);
 
             } catch (error) {
                 console.error('Error editing product:', error);

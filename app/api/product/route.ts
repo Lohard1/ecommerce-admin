@@ -63,12 +63,9 @@ export async function DELETE(req: NextRequest) {
         const {searchParams} = new URL(req.url);
         const id = searchParams.get('id')
 
-        let product;
-
         if(id){
-            product = await Product.deleteOne({_id:id});
+            await Product.deleteOne({_id:id});
         }
-        // const products = await Product.find();
         return NextResponse.json(true);
     } catch (error) {
         return NextResponse.json({ message: 'Error al eliminar el producto', error }, { status: 500 });

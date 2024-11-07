@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 const CategorySchema = new Schema({
     name: { type: String, require: true },
-    parent: { type: mongoose.Types.ObjectId, ref: 'Category'},
+    parent: { type: mongoose.Types.ObjectId, ref: 'Category', require: false},
     properties: [{name: String, values: [String]}],
 });
 

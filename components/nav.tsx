@@ -1,20 +1,18 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname} from "next/navigation";
 import IconGear from "./svg/IconGear";
 import IconStore from "./svg/IconStore";
 import IconHome from "./svg/IconHome";
 import IconProducts from "./svg/IconProducts";
 import IconOrders from "./svg/IconOrders";
 import IconCategories from "./svg/IconCategories";
-import { signOut } from "next-auth/react";
 import IconLogout from "./svg/IconLogout";
 
 export const Nav = ({ }) => {
     const inactiveLink = 'flex gap-1 p-1 hover:bg-white hover:text-black hover: rounded-l-lg';
     const activeLink = 'flex gap-1 p-1 bg-gray-50 text-blue-900 rounded-l-lg h-full';
-    const router = useRouter();
     const pathname = usePathname();
     
     return (
