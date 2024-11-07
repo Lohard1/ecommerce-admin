@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { mongooseConnect } from '@/lib/mongoose';
 import { Category } from '@/models/categories';
+import { auth } from '@/auth';
 
 export async function POST(req: NextRequest) {
 
@@ -26,7 +27,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-
+    const session = await auth()
     try {
         await mongooseConnect();
 

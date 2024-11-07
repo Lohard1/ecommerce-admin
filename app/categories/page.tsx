@@ -4,6 +4,9 @@ import Layout from "@/components/layout"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { CategoryType } from "../types/product"
+import { EditIcon } from "lucide-react"
+import IconEdit from "@/components/svg/IconEdit"
+import IconDelete from "@/components/svg/IconDelete"
 
 const CategoriesPage = () => {
     const [categories, setCategories] = useState<CategoryType[]>([]);
@@ -124,11 +127,11 @@ const CategoriesPage = () => {
             <h1>Categories</h1>
             <label> {editedCategory ? `Edit category ${editedCategory.name}` : 'Create new category'}</label>
             <form onSubmit={saveCategory} className=''>
-                <input type="text" placeholder="Category name" onChange={ev => setCategoryName(ev.target.value)} value={categoryName}>
+                <input type="text" placeholder="Category name" className="my-2" onChange={ev => setCategoryName(ev.target.value)} value={categoryName}>
                 </input>
                 <label>Parent Category</label>
                 <div>
-                    <select value={parentCategoryName} onChange={ev => setParentCategoryName(ev.target.value)} className="m-2 mb-3 p-0.5 ml-0">
+                    <select value={parentCategoryName} onChange={ev => setParentCategoryName(ev.target.value)} className="m-2 p-0.5 ml-0">
                         <option value=''> No parent category</option>
                         {categories.map(category => (
                             <option key={category._id} value={category._id}>{category.name}</option>
@@ -137,24 +140,26 @@ const CategoriesPage = () => {
                 </div>
                 <div>
                     <label>Properties</label>
-                    <button type="button" className="btn-primary mb-4 text-sm" onClick={addProperty}> Add new property</button>
+                    <button type="button" className="btn-primary text-sm " onClick={addProperty}> Add new property</button>
                     {(properties ?? []).length > 0 && properties?.map((property, index) => (
-                        <div className="flex gap-1" key={index}>
+                        <div className="flex my-2 gap-1" key={index}>
                             <input type="text" value={property?.name} onChange={ev => handlePropertyNameChange(index, property, ev.target.value)} placeholder="property name (example:color)"></input>
                             <input type="text" value={property?.values} onChange={ev => handlePropertyValueChange(index, property, ev.target.value)} placeholder="values, comma separated"></input>
                             <button type="button" className="btn-primary text-sm mb-1" onClick={ () => removeProperty(index)}>Remove</button>
                         </div>
                     ))}
                 </div>
+                <div className="my-2">
+                <button className="btn-primary !ml-0 my-2" type="submit"> Save </button>
                 {editedCategory && (
-                    <button type="button" className="btn-primary" onClick={() => {
+                    <button type="button" className="btn-primary !bg-red-500" onClick={() => {
                         setEditedCategory(null);
                         setProperties(null);
                         setParentCategoryName('');
                         setCategoryName('');
                     }}> Cancel </button>
                 ) }
-                <button className="btn-primary" type="submit"> Save </button>
+                </div>
             </form>
 
             {!editedCategory && (
@@ -172,8 +177,8 @@ const CategoriesPage = () => {
                             <td>{category.name}</td>
                             <td>{category.parent?.name}</td>
                             <td className="flex"> 
-                                <button className="btn-primary" onClick={() => deleteCategory(category._id)}>Delete</button> 
-                                <button className="btn-primary" onClick={() => editCategory(category)}>Edit</button> 
+                                <button className="btn-primary flex items-center !bg-red-500" onClick={() => deleteCategory(category._id)}><IconDelete className="h-4 w-4"/> Delete</button> 
+                                <button className="btn-primary flex items-center" onClick={() => editCategory(category)}><IconEdit className="h-4 w-4"/>  <span>Edit</span></button> 
                             </td>
                         </tr>
                     ))}

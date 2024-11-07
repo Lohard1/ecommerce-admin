@@ -9,9 +9,10 @@ import IconProducts from "./svg/IconProducts";
 import IconOrders from "./svg/IconOrders";
 import IconCategories from "./svg/IconCategories";
 import { signOut } from "next-auth/react";
+import IconLogout from "./svg/IconLogout";
 
 export const Nav = ({ }) => {
-    const inactiveLink = 'flex gap-1 p-1';
+    const inactiveLink = 'flex gap-1 p-1 hover:bg-white hover:text-black hover: rounded-l-lg';
     const activeLink = 'flex gap-1 p-1 bg-gray-50 text-blue-900 rounded-l-lg h-full';
     const router = useRouter();
     const pathname = usePathname();
@@ -20,12 +21,12 @@ export const Nav = ({ }) => {
         <aside className="text-white p-4 pr-0">
             <Link href={'/'} className="flex w-fit space-x-2 mb-4 mr-2">
                 <IconStore></IconStore>
-                <span className="text-nowrap">
+                <span className="w-min-fit">
                     Ecommerce Admin
                 </span>
             </Link>
             <nav>
-                <Link href={'/'} className={(pathname) === '/'? activeLink:inactiveLink}>
+                <Link href={'/'} className={(pathname) === '/'? activeLink : inactiveLink}>
                     <IconHome></IconHome> <span>Dashboard</span>
                 </Link>
                 <Link href={'/products'} className={(pathname).includes('/products')? activeLink:inactiveLink}>
@@ -44,10 +45,10 @@ export const Nav = ({ }) => {
                     <IconGear></IconGear>
                     <span>Settings</span>
                 </Link>
-                    <button onClick={()=>signOut()} className={inactiveLink}>
-                    <IconGear></IconGear>
+                <Link href={'/api/auth/signout'} className={inactiveLink}>
+                    <IconLogout></IconLogout>
                     <span>Logout</span>
-                    </button>
+                </Link>
             </nav>
         </aside>
     )

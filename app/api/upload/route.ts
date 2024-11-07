@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     
     try {
         const formData = await req.formData();
-        const allowedTypes = ['image/png', 'image/jpeg'];
+        const allowedTypes = ['image/png', 'image/jpeg','image/webp'];
         const files = formData.getAll('files');
         const fileUrls: string[] = [];
 

@@ -9,6 +9,8 @@ const ProductSchema = new Schema({
     images: [{type: String}],
     category: String,
     properties: [{name: String, values: String}],
+}, {
+    timestamps: true,
 });
 
 export const Product = models.Product || model('Product', ProductSchema);

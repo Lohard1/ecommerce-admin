@@ -49,7 +49,6 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
                 ...(selCatInfo.parent?.properties || [])
             );
         }
-
     }
 
     async function saveProduct(ev: React.FormEvent) {
@@ -110,7 +109,7 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
     }
 
     return (
-        <form onSubmit={saveProduct}>
+        <form className="h-full" onSubmit={saveProduct}>
             <label>Product Name</label>
             <input type="text" placeholder="Product Name" value={title} onChange={ev => setTitle(ev.target.value)}>
             </input>
@@ -124,7 +123,7 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
                 </select>
 
                 {properties.length > 0 && productProperties && properties.map((prop, index) => (
-                    <div key={index} className="flex w-full gap-1">
+                    <div key={index} className="flex">
                         <div>{prop.name}</div>
                         <select value={productProperties.find(p => p.name === prop.name)?.values || ''} onChange={ev => setProductProp(prop.name, ev.target.value)} >
                             {prop.values.map((item,index) => (
@@ -135,9 +134,9 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
                 ))}
             </div>
             <label> Photos </label>
-            <div className="flex flex-row">
+            <div className="flex flex-row contain-content">
                 {!!images?.length && images.map(link => (
-                    <div key={link} className="h-24 w-24" >
+                    <div key={link} className="flex h-24 w-24" >
                         <img src={link} />
                     </div>
                 ))}
@@ -146,7 +145,7 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
                         <Spinner />
                     </div>
                 )}
-                <label className="cursor-pointer w-24 h-24 border flex items-center justify-center bg-gray-100 rounded-lg">
+                <label className="cursor-pointer w-24 h-24 border flex items-center justify-center bg-gray-200 rounded-lg">
                     <IconUpload />
                     <div>
                         Upload
@@ -158,10 +157,13 @@ const ProductForm = ({ product }: { product?: ProductType }) => {
             <textarea placeholder="Description" value={description} onChange={ev => setDescription(ev.target.value)}>
             </textarea>
             <label>Price</label>
-            <input type="number" placeholder="Price" value={price} onChange={ev => setPrice(ev.target.value)}>
+            <input className="mb-2" type="number" placeholder="Price" value={price} onChange={ev => setPrice(ev.target.value)}>
             </input>
             <button type="submit" className="btn-primary">
                 Save
+            </button>
+            <button onClick={()=>router.push('/products')} type="button" className="btn-danger ">
+                Cancel
             </button>
         </form>
     );

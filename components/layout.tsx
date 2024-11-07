@@ -1,45 +1,54 @@
-import { Children } from "react";
+'use client'
+
 import { Nav } from "./nav";
-import UserSession from "./user-session";
+import { signIn, useSession } from "next-auth/react";
+import { Poppins } from "next/font/google"
+import { cn } from "@/lib/utils";
+import { FcGoogle } from "react-icons/fc";
+
+const font = Poppins({
+    subsets: ["latin"],
+    weight: ["600"]
+})
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-    return (
-        <div className="flex h-screen w-screen bg-blue-800">
-            <div className="">
-                <Nav></Nav>
-            </div>
-            {/* <p className="text-white text-lg py-2 font-semibold">
-            Ecommerce admin panel
-          </p>
-        </div>
-  
-        <div className="flex flex-col h-full w-full place-content-center bg-blue-100">
-          <div className="flex w-full h-fit justify-center bg-blue-200 ">
-            <form className="" action={async () => {
-              "use server"
-              await signIn("github")
-            }}>
-              <button type="submit" className="text-black bg-white text-lg p-2 rounded-full">
-                Login with GitHub
-              </button>
-            </form>
-          </div>
-          <div className="flex w-full h-fit justify-center bg-blue-200">
-            <form className="" action={async () => {
-              "use server"
-              await signIn("google")
-            }}>
-              <button type="submit" className="text-black bg-white text-lg p-2 border-4 border-gray-200 rounded-full">
-                Login with Google
-              </button>
-            </form>
-          </div>
-          <SignOutButton></SignOutButton> */}
-            <div className="flex flex-col h-auto w-full m-2 ml-0 rounded-lg bg-white p-4">
+    const { data: session, status } = useSession()
+
+    if (status === 'unauthenticated') {
+        return (
+            <div className="flex h-screen flex-col  items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to to-blue-800">
+                <div className="space-y-6 text-center">
+                    <h1 className={cn
+                        ("text-6xl font-semibold text-white drop-shadow-md",
+                            font.className)}>
+                        🏪 Ecommerce Admin Panel
+                    </h1>
+                    <p className="text-white text-lg">
+                        Authentication service
+                    </p>
+                </div>
                 <div>
-                    {children}
+                    <button className="flex w-full text-lg px-4 py-1 mt-4 rounded-md place-content-center bg-blue-200 focus:ring-1 ring-blue-900" onClick={() => signIn("google", { redirectTo: "/" })}>
+                        <FcGoogle className="h-6 w-6 mr-2" /> Sign In
+                    </button>
                 </div>
             </div>
-        </div>
-    );
+        )
+    }
+
+    if (status === 'authenticated') {
+        return (
+            <div className="flex h-screen w-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to to-blue-800  overflow-auto">
+
+                <div className="">
+                    <Nav></Nav>
+                </div>
+                <div className="flex flex-col h-auto w-full m-2 ml-0 rounded-lg bg-white p-4 overflow-auto">
+                    <div>
+                        {children}
+                    </div>
+                </div>
+            </div>
+        );
+    }
 }

@@ -11,7 +11,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             const productDoc = await Product.create({
                 title,description,price,
             })
-            res.status(200).json({ message: 'Conectado a MongoDB y solicitud POST recibida.' });
+            res.status(200).json({ message: 'OK' });
             res.json(productDoc);
         }
 }
