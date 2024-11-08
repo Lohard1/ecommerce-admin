@@ -17,12 +17,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     clientId: process.env.AUTH_GOOGLE_ID,
     clientSecret: process.env.AUTH_GOOGLE_SECRET
   })],
-  callbacks: {
-    async signIn({ user, account, profile }) {
-      if (user.email && !adminEmails.includes(user.email)) {
-        return '/'; // Redirige al home si el email no está en adminEmails
-      }
-      return true; // Permite la autenticación si el email es válido
-    },
-  },
+  // callbacks: {
+  //   async signIn({ user, account, profile }) {
+  //     // if (user.email && !adminEmails.includes(user.email)) {
+  //     //   return '/'; // Redirige al home si el email no está en adminEmails
+  //     // }
+  //     return true; // Permite la autenticación si el email es válido
+  //   },
+  // },
 })
